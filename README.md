@@ -11,7 +11,7 @@
 - ``medium`` (3)
 - ``quiet`` (1)
 - ``mute``, ``off`` (0)
-- ``unmute`` (volume prior to mute)
+- ``unmute`` (volume prior to mute/off)
 - ``1``-``10``
 
 ## Binary
