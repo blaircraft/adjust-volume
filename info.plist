@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>net.blaircraft.adjustvolume</string>
+	<key>connections</key>
+	<dict>
+		<key>3AEC4194-09B8-4940-81DA-7A12856D90AA</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>A0A73E87-36E6-4159-8F18-B37EE539E61C</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>A0A73E87-36E6-4159-8F18-B37EE539E61C</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>FCB486EA-7072-4D93-BE9D-B7610DB67C52</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Blair Craft</string>
+	<key>description</key>
+	<string>Adjust the volume of your mac from within Alfred</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>Adjust Volume</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>volume</string>
+				<key>subtext</key>
+				<string>max, loud, half, medium, mute, unmute, off, 1-10</string>
+				<key>text</key>
+				<string>Adjust the volume</string>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>3AEC4194-09B8-4940-81DA-7A12856D90AA</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<true/>
+				<key>output</key>
+				<integer>0</integer>
+				<key>removeextension</key>
+				<false/>
+				<key>sticky</key>
+				<false/>
+				<key>text</key>
+				<string>Use max, loud, half, medium, quiet, mute, unmute, or 1-10 to set the volume.</string>
+				<key>title</key>
+				<string>Volume keyword not found</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>FCB486EA-7072-4D93-BE9D-B7610DB67C52</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>script</key>
+				<string># Volatile Storage
+STORE="$HOME/Library/Caches/com.runningwithcrayons.Alfred-2/Workflow Data/net.blaircraft.adjustvolume"
+VOLUME_FILE="$STORE/volume"
+
+if [ ! -d "$STORE" ]
+then
+	mkdir "$STORE"
+fi
+
+case {query} in
+    "max")
+        osascript -e "set Volume 10" -e "beep"
+        ;;
+    "loud")
+        osascript -e "set Volume 7" -e "beep"
+        ;;
+    "half")
+        osascript -e "set Volume 5" -e "beep"
+        ;;
+    "medium")
+        osascript -e "set Volume 3" -e "beep"
+        ;;
+	"quiet")
+		osascript -e "set Volume 1" -e "beep"
+		;;
+    "mute")
+		osascript -e "output volume of (get volume settings)" &gt; "$VOLUME_FILE"
+		osascript -e "set Volume 0"
+		;;
+	"off")
+		osascript -e "output volume of (get volume settings)" &gt; "$VOLUME_FILE"
+		osascript -e "set Volume 0"
+		;;
+	"unmute")
+		# Reset the volume back to the pre-mute setting
+		if [ -f "$VOLUME_FILE" ]
+		then
+			PREMUTE_VOLUME=$(cat "$VOLUME_FILE")
+			VOLUME=$(($PREMUTE_VOLUME/10))
+			osascript -e "set Volume $VOLUME" -e "beep"
+		fi
+		;;
+	"show")
+		osascript -e "output volume of (get volume settings)"
+		;;
+    *)
+        if (({query}&gt;=0 &amp;&amp; {query}&lt;=10))
+        then
+			osascript -e "set Volume {query}" -e "beep"
+		else
+			echo {query}
+        fi
+		;;
+esac</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>A0A73E87-36E6-4159-8F18-B37EE539E61C</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string>Adjust the volume on your Mac from within Alfred. An extension of Volume Control by Ted Wise.</string>
+	<key>uidata</key>
+	<dict>
+		<key>3AEC4194-09B8-4940-81DA-7A12856D90AA</key>
+		<dict>
+			<key>ypos</key>
+			<real>120</real>
+		</dict>
+		<key>A0A73E87-36E6-4159-8F18-B37EE539E61C</key>
+		<dict>
+			<key>ypos</key>
+			<real>120</real>
+		</dict>
+		<key>FCB486EA-7072-4D93-BE9D-B7610DB67C52</key>
+		<dict>
+			<key>ypos</key>
+			<real>120</real>
+		</dict>
+	</dict>
+	<key>webaddress</key>
+	<string>http://www.blaircraft.net/alfred</string>
+</dict>
+</plist>
